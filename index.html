@@ -4,10 +4,38 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/src/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite App</title>
+    <title>React Shop App</title>
   </head>
   <body class="bg-light">
     <div id="root"></div>
+    <script type="module">
+      document.addEventListener("DOMContentLoaded", async () => {
+        try {
+          const response = await fetch(
+            "https://test-frontend.dev.int.perx.ru/api/dealers/"
+          );
+
+          if (!response.ok) {
+            throw new Error("Fehler beim Laden der Händlerdaten");
+          }
+
+          const dealers = await response.json();
+          console.log("dealersdata:", dealers);
+
+          const app = window.App;
+
+          if (app && app.start) {
+            console.log("Start App with dealers:", dealers);
+            app.start({ dealers: dealers.map((dealer) => dealer.id) });
+          } else {
+            console.log("App not available");
+          }
+        } catch (error) {
+          console.error("Error while fetching dealers data:", error);
+        }
+      });
+    </script>
+
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
